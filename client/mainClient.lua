@@ -6,19 +6,19 @@ end
 
 -- TEST 1: Menu principal avec tous types
 RegisterCommand('testui1', function()
-    exports['ui_lib']:CreateMenu("🎮 UILib Demo - Tous types", {maxVisible = 10}, function()
-        exports['ui_lib']:Button("Simple bouton", "Test callback", function()
+    exports['UILib']:CreateMenu("🎮 UILib Demo - Tous types", {maxVisible = 10}, function()
+        exports['UILib']:Button("Simple bouton", "Test callback", function()
             notify("Bouton cliqué !")
         end)
         
         local god = false
-        exports['ui_lib']:Toggle("God Mode", god, function(state)
+        exports['UILib']:Toggle("God Mode", god, function(state)
             god = state
             SetEntityInvincible(PlayerPedId(), state)
             notify("God: " .. (state and "ON" or "OFF"))
         end)
         
-        exports['ui_lib']:Slider("NoClip Speed", 1.0, 5.0, 1.0, function(value)
+        exports['UILib']:Slider("NoClip Speed", 1.0, 5.0, 1.0, function(value)
             notify("Vitesse: " .. value)
         end)
     end)
@@ -26,18 +26,18 @@ end)
 
 -- TEST 2: Submenus imbriqués
 RegisterCommand('testui2', function()
-    exports['ui_lib']:CreateMenu("📁 Navigation", {}, function()
-        exports['ui_lib']:SubMenu("Armes", function()
-            exports['ui_lib']:Button("Pistol", function()
+    exports['UILib']:CreateMenu("📁 Navigation", {}, function()
+        exports['UILib']:SubMenu("Armes", function()
+            exports['UILib']:Button("Pistol", function()
                 GiveWeaponToPed(PlayerPedId(), `WEAPON_PISTOL`, 250, false, true)
             end)
-            exports['ui_lib']:Button("AK47", function()
+            exports['UILib']:Button("AK47", function()
                 GiveWeaponToPed(PlayerPedId(), `WEAPON_ASSAULTRIFLE`, 250, false, true)
             end)
         end)
         
-        exports['ui_lib']:SubMenu("Véhicules", function()
-            exports['ui_lib']:Button("Adder", function()
+        exports['UILib']:SubMenu("Véhicules", function()
+            exports['UILib']:Button("Adder", function()
                 local hash = `adder`
                 RequestModel(hash)
                 while not HasModelLoaded(hash) do Wait(0) end
@@ -50,7 +50,7 @@ end)
 
 -- TEST 3: Player list dynamique
 RegisterCommand('testui3', function()
-    exports['ui_lib']:PlayerList("👥 Joueurs proches", function(id, name)
+    exports['UILib']:PlayerList("👥 Joueurs proches", function(id, name)
         notify("Sélection: " .. name .. " (ID:" .. id .. ")")
     end)
 end)
