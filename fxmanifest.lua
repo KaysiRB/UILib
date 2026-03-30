@@ -23,9 +23,9 @@ server_scripts {
 
 exports {
     'CreateMenu',
+    'SubMenu', 
     'Button',
     'Toggle',
-    'Slider',
-    'SubMenu',
-    'PlayerList'
+    'Finish',
+    'Close'
 }
