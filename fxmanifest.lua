@@ -1,32 +1,17 @@
-name 'UILib'
 fx_version 'cerulean'
 game 'gta5'
 lua54 'yes'
-
-author 'Novaa'
-description 'UILib - Standalone NUI Menu Framework v2.0'
-version '2.0.0'
-
-ui_page 'html/index.html'
-
-files {
-    'html/*'
-}
+name 'UILib'
 
 client_scripts {
     'client/lib/main.lua',
     'client/mainClient.lua'
 }
 
-server_scripts {
-    'server/mainServer.lua'
-}
+ui_page 'html/index.html'
+files { 'html/*' }
 
 exports {
-    'CreateMenu',
-    'SubMenu', 
-    'Button',
-    'Toggle',
-    'Finish',
-    'Close'
+    'CreateMenu', 'Button', 'Toggle', 'SubMenu', 
+    'Finish', 'Close', 'PlayerList'
 }

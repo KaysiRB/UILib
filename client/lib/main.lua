@@ -6,8 +6,21 @@ local callbacks = {}
 
 -- Core render
 local function renderMenu()
-    currentMenu.items = menuItems
-    SendNUIMessage({action = "openMenu", menu = currentMenu})
+    -- Clone SANS functions !
+    local safeMenu = {
+        title = currentMenu.title,
+        items = {}
+    }
+    
+    for i, item in ipairs(menuItems) do
+        safeMenu.items[i] = {
+            label = item.label,
+            desc = item.desc or "",
+            type = item.type or "button"
+        }
+    end
+    
+    SendNUIMessage({action = "openMenu", menu = safeMenu})
 end
 
 -- Auto back button
@@ -102,25 +115,22 @@ end
 function UILib.PlayerList(title, cb)
     local players = {}
     for id = 0, 128 do
-        if GetPlayerServerId(id) ~= 0 then
-            local ped = GetPlayerPed(id)
-            local name = GetPlayerName(id)
+        if NetworkIsPlayerActive(id) then
             players[#players+1] = {
                 id = id,
-                name = name,
-                dist = #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(ped))
+                name = GetPlayerName(id) or "Unknown",
+                serverId = GetPlayerServerId(id)
             }
         end
     end
-    table.sort(players, function(a,b) return a.dist < b.dist end)
     
-    UILib.CreateMenu(title, {}, function()
+    CreateMenu(title, function()
         for _, player in ipairs(players) do
-            UILib.Button(player.name .. " (" .. math.floor(player.dist) .. "m)", function()
-                cb(player.id, player.name)
+            Button(player.name .. " (ID: " .. player.serverId .. ")", function()
+                cb(player.serverId, player.name)
             end)
         end
-        UILib.Finish()
+        Finish()
     end)
 end
 
