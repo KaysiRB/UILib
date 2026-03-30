@@ -113,18 +113,25 @@ function UILib.SubMenu(label, builder)
 end
 
 function PlayerList(title, callback)
-    CreateMenu(title, function()
-        for id = 0, 128 do
-            if NetworkIsPlayerActive(id) then
-                local serverId = GetPlayerServerId(id)
-                local name = GetPlayerName(id) or "Unknown"
-                Button(name .. " (ID:" .. serverId .. ")", function()
-                    callback(serverId, name)
-                end)
-            end
+    menuItems = {}
+    callbacks = {}
+    currentMenu = { title = title }
+    
+    for id = 0, 128 do
+        if NetworkIsPlayerActive(id) then
+            local serverId = GetPlayerServerId(id)
+            local name = GetPlayerName(id) or "Unknown"
+            table.insert(menuItems, { label = name .. " (ID:" .. serverId .. ")" })
+            table.insert(callbacks, function()
+                callback(serverId, name)
+            end)
         end
-        Finish()
-    end)
+    end
+    
+    addBackButton()
+    SetNuiFocus(true, true)
+    SetNuiFocusKeepInput(true)
+    renderMenu()
 end
 exports('PlayerList', PlayerList)
 
