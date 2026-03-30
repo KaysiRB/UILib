@@ -6,28 +6,28 @@ local callbacks = {}
 
 -- Core render
 local function renderMenu()
-    -- Clone SANS functions !
-    local safeMenu = {
-        title = currentMenu.title,
-        items = {}
-    }
-    
+    local safeItems = {}
     for i, item in ipairs(menuItems) do
-        safeMenu.items[i] = {
-            label = item.label,
-            desc = item.desc or "",
-            type = item.type or "button"
+        safeItems[i] = {
+            label = item.label or "",
+            desc = item.desc or ""
         }
     end
     
-    SendNUIMessage({action = "openMenu", menu = safeMenu})
+    SendNUIMessage({
+        action = "openMenu",
+        menu = {
+            title = currentMenu.title,
+            items = safeItems
+        }
+    })
 end
 
 -- Auto back button
 local function addBackButton()
     if #menuStack > 0 then
-        table.insert(menuItems, 1, {label = "← Back", type = "back"})
-        table.insert(callbacks, 1, function()
+        table.insert(menuItems, { label = "← Back", type = "back" })
+        table.insert(callbacks, function()
             local prev = table.remove(menuStack)
             currentMenu = prev.menu
             menuItems = prev.items
@@ -112,27 +112,21 @@ function UILib.SubMenu(label, builder)
     end
 end
 
-function UILib.PlayerList(title, cb)
-    local players = {}
-    for id = 0, 128 do
-        if NetworkIsPlayerActive(id) then
-            players[#players+1] = {
-                id = id,
-                name = GetPlayerName(id) or "Unknown",
-                serverId = GetPlayerServerId(id)
-            }
-        end
-    end
-    
+function PlayerList(title, callback)
     CreateMenu(title, function()
-        for _, player in ipairs(players) do
-            Button(player.name .. " (ID: " .. player.serverId .. ")", function()
-                cb(player.serverId, player.name)
-            end)
+        for id = 0, 128 do
+            if NetworkIsPlayerActive(id) then
+                local serverId = GetPlayerServerId(id)
+                local name = GetPlayerName(id) or "Unknown"
+                Button(name .. " (ID:" .. serverId .. ")", function()
+                    callback(serverId, name)
+                end)
+            end
         end
         Finish()
     end)
 end
+exports('PlayerList', PlayerList)
 
 function UILib.Finish() end
 function UILib.Close()
@@ -160,5 +154,4 @@ exports('Button', UILib.Button)
 exports('Toggle', UILib.Toggle)
 exports('Slider', UILib.Slider)
 exports('SubMenu', UILib.SubMenu)
-exports('PlayerList', UILib.PlayerList)
 exports('Close', UILib.Close)

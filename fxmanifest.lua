@@ -3,13 +3,13 @@ game 'gta5'
 lua54 'yes'
 name 'UILib'
 
+ui_page 'html/index.html'
+files { 'html/*' }
+
 client_scripts {
     'client/lib/main.lua',
     'client/mainClient.lua'
 }
-
-ui_page 'html/index.html'
-files { 'html/*' }
 
 exports {
     'CreateMenu', 'Button', 'Toggle', 'SubMenu', 

@@ -50,8 +50,8 @@ end)
 
 -- TEST 3: Player list dynamique
 RegisterCommand('testui3', function()
-    exports['UILib']:PlayerList("👥 Joueurs proches", function(id, name)
-        notify("Sélection: " .. name .. " (ID:" .. id .. ")")
+    exports['UILib']:PlayerList("Admin Players", function(id, name)
+        notify("Selected: " .. name .. " (" .. id .. ")")
     end)
 end)
 
